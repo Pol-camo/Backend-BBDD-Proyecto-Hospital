@@ -45,6 +45,14 @@ public class NurseController {
     // This returns a JSON or XML with the users
     return nurseRepository.findAll();
   }
+  
+  @GetMapping(path="/name/{name}")
+  public ResponseEntity<Nurse> findByName(@PathVariable("name") String name) {
+    return nurseRepository
+        .findFirstByFullNameIgnoreCaseOrUserNameIgnoreCase(name, name)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
 
   @PostMapping(path="/login")
   public ResponseEntity<Boolean> login(@RequestBody LoginRequest request) {
