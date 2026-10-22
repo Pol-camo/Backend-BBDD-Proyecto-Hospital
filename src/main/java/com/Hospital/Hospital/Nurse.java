@@ -1,18 +1,18 @@
 package com.Hospital.Hospital;
-
+ 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+ 
 public class Nurse {
-	 
+ 
 	private int id;
  
-	@JsonProperty("nombre_completo")
-	private String nombreCompleto;
+	@JsonProperty("full_name")
+	private String fullName;
  
-	@JsonProperty("nombre_usuario")
-	private String nombreUsuario;
+	@JsonProperty("user_name")
+	private String userName;
  
-	private String contrasena;
+	private String password;
  
 	public Nurse() {
 	}
@@ -25,27 +25,27 @@ public class Nurse {
 		this.id = id;
 	}
  
-	public String getNombreCompleto() {
-		return nombreCompleto;
+	public String getFullName() {
+		return fullName;
 	}
  
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
  
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public String getUserName() {
+		return userName;
 	}
  
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
  
-	public String getContrasena() {
-		return contrasena;
+	public String getPassword() {
+		return password;
 	}
  
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
