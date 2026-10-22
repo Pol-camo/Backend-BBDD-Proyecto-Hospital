@@ -1,24 +1,24 @@
 package com.Hospital.Hospital;
-
-
+ 
 public class LoginRequest {
-
-    private String nombreUsuario;
-    private String contrasena;
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
+ 
+    private String username;
+    private String password;
+ 
+    public String getUsername() {
+        return username;
     }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+ 
+    public void setUsername(String username) {
+        this.username = username;
     }
-
-    public String getContrasena() {
-        return contrasena;
+ 
+    public String getPassword() {
+        return password;
     }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+ 
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
+ 
