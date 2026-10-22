@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
  
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/nurse") // This means URL's start with /demo (after Application path)
@@ -45,12 +45,14 @@ public class NurseController {
     // This returns a JSON or XML with the users
     return nurseRepository.findAll();
   }
-  
-  @GetMapping(path="/name/{name}")
-  public ResponseEntity<Nurse> findByName(@PathVariable("name") String name) {
-    return nurseRepository
-        .findFirstByFullNameIgnoreCaseOrUserNameIgnoreCase(name, name)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+
+  @PostMapping(path="/login")
+  public ResponseEntity<Boolean> login(@RequestBody LoginRequest request) {
+    Optional<Nurse> nurse = nurseRepository.findByUserName(request.getUsername());
+
+    if (nurse.isPresent() && nurse.get().getPassword().equals(request.getPassword())) {
+      return ResponseEntity.ok(true);
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
 }
