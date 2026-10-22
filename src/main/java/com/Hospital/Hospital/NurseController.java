@@ -75,7 +75,7 @@ public class NurseController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.unauthorized).body(false);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
     }
 
    
