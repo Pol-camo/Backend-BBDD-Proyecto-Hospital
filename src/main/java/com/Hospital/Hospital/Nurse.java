@@ -1,10 +1,19 @@
 package com.Hospital.Hospital;
  
 import com.fasterxml.jackson.annotation.JsonProperty;
- 
+import org.jspecify.annotations.Nullable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity  
 public class Nurse {
  
-	private int id;
+	@Id
+	  @GeneratedValue(strategy=GenerationType.AUTO)
+	  private @Nullable Integer id;
  
 	@JsonProperty("full_name")
 	private String fullName;
