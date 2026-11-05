@@ -55,10 +55,10 @@ public class NurseController {
   }
 
   @PostMapping(path="/login")
-  public ResponseEntity<Boolean> login(@RequestBody LoginRequest request) {
-    Optional<Nurse> nurse = nurseRepository.findByUserName(request.getUsername());
+  public ResponseEntity<Boolean> login(@RequestParam String user, @RequestParam String password) {
+    Optional<Nurse> nurse = nurseRepository.findByUserName(user);
 
-    if (nurse.isPresent() && nurse.get().getPassword().equals(request.getPassword())) {
+    if (nurse.isPresent() && nurse.get().getPassword().equals(password)) {
       return ResponseEntity.ok(true);
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
