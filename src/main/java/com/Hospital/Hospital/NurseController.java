@@ -63,4 +63,15 @@ public class NurseController {
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
   }
+  
+  @GetMapping(path="/{id}")
+  public ResponseEntity<Nurse> getNurseById(@PathVariable("id") Integer id) {
+    return nurseRepository
+        .findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
+  
 }
+
+
