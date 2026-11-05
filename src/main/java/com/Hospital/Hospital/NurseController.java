@@ -41,9 +41,9 @@ public class NurseController {
   }
 
   @GetMapping(path="/index")
-  public @ResponseBody Iterable<Nurse> getAllnurses() {
+  public ResponseEntity<Iterable<Nurse>> getAllnurses() {
     // This returns a JSON or XML with the users
-    return nurseRepository.findAll();
+	  return ResponseEntity.ok(nurseRepository.findAll());
   }
   
   @GetMapping(path="/name/{name}")
