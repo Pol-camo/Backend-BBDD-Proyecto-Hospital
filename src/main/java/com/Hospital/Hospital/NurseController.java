@@ -40,7 +40,7 @@ public class NurseController {
     return "Saved";
   }
 
-  @GetMapping(path="/all")
+  @GetMapping(path="/index")
   public @ResponseBody Iterable<Nurse> getAllnurses() {
     // This returns a JSON or XML with the users
     return nurseRepository.findAll();
