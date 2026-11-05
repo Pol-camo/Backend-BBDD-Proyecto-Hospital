@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.PutMapping;
 
 
 import java.util.ArrayList;
@@ -71,6 +71,20 @@ public class NurseController {
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   } 
+  
+  @PutMapping(path="/{id}")
+  public ResponseEntity<Nurse> updateNurse(@PathVariable("id") Integer id,
+      @RequestBody Nurse updated) {
+    return nurseRepository
+        .findById(id)
+        .map(nurse -> {
+          nurse.setFullName(updated.getFullName());
+          nurse.setUserName(updated.getUserName());
+          nurse.setPassword(updated.getPassword());
+          return ResponseEntity.ok(nurseRepository.save(nurse));
+        })
+        .orElse(ResponseEntity.notFound().build());
+  }
 }
 
 
