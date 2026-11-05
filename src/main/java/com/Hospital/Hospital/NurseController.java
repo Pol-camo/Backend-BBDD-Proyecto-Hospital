@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 import java.util.ArrayList;
@@ -85,6 +86,16 @@ public class NurseController {
         })
         .orElse(ResponseEntity.notFound().build());
   }
+  
+  @DeleteMapping(path="/{id}")
+  public ResponseEntity<Void> deleteNurse(@PathVariable("id") Integer id) {
+    if (!nurseRepository.existsById(id)) {
+      return ResponseEntity.notFound().build();
+    }
+    nurseRepository.deleteById(id);
+    return ResponseEntity.noContent().build();
+  }
+  
 }
 
 
