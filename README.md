@@ -1,35 +1,35 @@
 # 🏥 Hospital Back-end Project
 
-REST API built with **Spring Boot** that provides the server side of a hospital management system, focused on managing nurse information and access. Data is persisted in a **MySQL** database through **Spring Data JPA (Hibernate)**.
+REST API built with Spring Boot that provides the server side of a hospital management system, focused on managing nurse information, authentication, and access control. Data is persisted in a MySQL database through Spring Data JPA (Hibernate).
 
 ---
 
 ## 📖 About the project
 
-This project is the back-end of a hospital application developed as part of the *Introduction to Back-end* module. It exposes a set of JSON endpoints under `/nurse` that allow clients to:
+This project is the back-end of a hospital application developed as part of the Introduction to Back-end module. It exposes a set of endpoints under /nurse that allow clients to:
+- Register new nurses (/nurse/add)
+- List all registered nurses (/nurse/index)
+- Validate a nurse's login credentials (/nurse/login)
+- Search for a nurse by name or username (/nurse/name/{name})
 
-- List all registered nurses
-- Validate a nurse's login credentials
-- Search for a nurse by name
-
-The project is structured following standard Spring Boot conventions (controller, entity, repository layers) and is designed to grow with additional entities and endpoints.
+The project follows standard Spring Boot conventions (Controllers, Entities, Repositories, and DTOs) and includes automated workflows and integration testing.
 
 ---
 
 ## 🛠️ Tech stack
 
-| Technology | Version / usage |
-|---|---|
+| Technology | Version / Usage |
+| :--- | :--- |
 | Java | 17 |
 | Spring Boot | 4.1.1 |
-| Spring Web MVC | REST endpoints returning JSON |
-| Spring Data JPA (Hibernate) | Persistence and data access |
-| MySQL | Database (`mysql-connector-j` driver) |
-| Maven (`mvnw` wrapper) | Dependency management and build |
-| Testcontainers (MySQL) | Integration tests against a real database in a container |
+| Spring Web MVC | REST controllers returning JSON |
+| Spring Data JPA | Persistence and data access (Hibernate) |
+| MySQL | Relational Database (mysql-connector-j driver) |
+| Maven | Dependency management and build (mvnw wrapper) |
+| Testcontainers | Integration tests against a real containerized database |
 | Eclipse IDE | Development environment |
-| Postman | API testing |
-| GitHub | Version control |
+| Workflows / Automation | Automated verification and test execution flows |
+| Git & GitHub | Version control |
 
 ---
 
@@ -38,114 +38,88 @@ The project is structured following standard Spring Boot conventions (controller
 - JDK 17 or higher
 - A running MySQL instance (local or remote)
 - Eclipse IDE with Maven support (or any compatible IDE)
-- Postman (optional, for testing the API)
-- Docker (only needed to run the Testcontainers tests)
+- Docker (required to run Testcontainers integration tests)
 
 ---
 
-## 🗄️ Database
+## 🗄️ Database Configuration
 
 1. Create the database in MySQL:
-
-   ```sql
    CREATE DATABASE hospital;
-   ```
 
-2. Configure the connection in `src/main/resources/application.properties`:
-
-   ```properties
+2. Configure your connection details in src/main/resources/application.properties:
    spring.datasource.url=jdbc:mysql://localhost:3306/hospital
    spring.datasource.username=YOUR_USER
    spring.datasource.password=YOUR_PASSWORD
    spring.jpa.hibernate.ddl-auto=update
    spring.jpa.show-sql=true
-   ```
 
-   > ⚠️ Adjust the database name, user and password to your environment. Never commit real credentials to the repository.
-
-### Data model
-
-<!-- Add the draw.io diagram image and the full list of entities here -->
-
-| Entity | Description |
-|---|---|
-| `Nurse` | Nurse registered in the hospital |
-| _…_ | _Remaining entities of the model_ |
+> ⚠️ Security Warning: Adjust the database name, user, and password to match your local environment. Never commit real credentials to GitHub.
 
 ---
 
-## 🔌 Endpoints
+## 🗄️ Data Model (Nurse)
 
-All routes start with `/nurse` and return JSON.
-
-| Method | Route | Description | Responses |
-|---|---|---|---|
-| `GET` | `/nurse/index` | Returns all registered nurses | `200` |
-| `POST` | `/nurse/login` | Validates the user and password sent in the request body | `200` → `true` · `403` → `false` |
-| `GET` | `/nurse/name/{name}` | Finds a nurse by name or username | `200` with the nurse's data · `404` if not found |
-
-### Example: login
-
-```http
-POST http://localhost:8080/nurse/login
-Content-Type: application/json
-
-{
-  "user": "username",
-  "password": "password"
-}
-```
-
-> Adjust the body field names to match those defined in the `Nurse` class.
+| Field | Type | JSON Mapping / Notes | Description |
+| :--- | :--- | :--- | :--- |
+| id | Integer | Auto-generated (@Id) | Unique identifier |
+| fullName | String | full_name | Full name of the nurse |
+| userName | String | user_name | Username used for login |
+| password | String | Internal | Account password |
 
 ---
 
-## 🗂️ Project structure
+## 🔌 API Endpoints
 
-```
+All routes are prefixed with /nurse.
+
+| Method | Route | Parameters / Body | Description | Response / Status |
+| :--- | :--- | :--- | :--- | :--- |
+| POST | /nurse/add | name, password, user (RequestParam) | Registers a new nurse | 200 OK ("Saved") |
+| GET | /nurse/index | None | Returns all registered nurses | 200 OK (JSON Array) |
+| GET | /nurse/name/{name} | Path Variable (name) | Finds a nurse by full name or username (case-insensitive) | 200 OK with data · 404 Not Found |
+| POST | /nurse/login | user, password (RequestParam) | Validates user credentials | 200 OK (true) · 401 Unauthorized (false) |
+
+---
+
+## 🗂️ Project Structure
+
 Backend-BBDD-Proyecto-Hospital
 ├── .mvn/wrapper/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/Hospital/Hospital/
-│   │   │   ├── HospitalApplication.java   # Main class
-│   │   │   ├── Nurse.java                 # Nurse entity
-│   │   │   └── NurseController.java       # /nurse endpoints
+│   │   │   ├── HospitalApplication.java   # Main application class
+│   │   │   ├── Nurse.java                 # Nurse entity model
+│   │   │   ├── NurseController.java       # REST endpoints controller
+│   │   │   ├── NurseRepository.java       # Spring Data JPA repository
+│   │   │   └── LoginRequest.java          # DTO for login payloads
 │   │   └── resources/
-│   │       └── application.properties     # Configuration and DB connection
-│   └── test/                              # Tests
-├── mvnw / mvnw.cmd                        # Maven Wrapper
-└── pom.xml
-```
-
-> Update this tree as you add repositories, services or more entities.
+│   │       └── application.properties     # DB and Spring configuration
+│   └── test/                              # Integration & unit tests
+├── mvnw / mvnw.cmd                        # Maven Wrapper scripts
+└── pom.xml                                # Maven project configuration
 
 ---
 
-## ▶️ Running the project
+## ▶️ Running the Project
 
 ### In Eclipse
-
 1. Clone the repository:
+   git clone [https://github.com/Pol-camo/Backend-BBDD-Proyecto-Hospital.git](https://github.com/Pol-camo/Backend-BBDD-Proyecto-Hospital.git)
+2. Import the project: File > Import... > Maven > Existing Maven Projects.
+3. Set up your database details in src/main/resources/application.properties.
+4. Open HospitalApplication.java, right-click, and choose Run As > Spring Boot App.
 
-   ```bash
-   git clone https://github.com/Pol-camo/Backend-BBDD-Proyecto-Hospital.git
-   ```
+### From the Terminal
+* Linux / macOS:
+  ./mvnw spring-boot:run
+* Windows:
+  mvnw.cmd spring-boot:run
 
-2. Import the project: `File > Import... > Maven > Existing Maven Projects`.
-3. Set up `application.properties` with your MySQL details (see the *Database* section).
-4. Open `HospitalApplication.java`, right-click and choose `Run As > Spring Boot App`.
-5. Test the routes with **Postman** at `http://localhost:8080`.
+---
 
-### From the terminal
+## 🧪 Testing & Workflows
 
-```bash
-./mvnw spring-boot:run      # Linux / macOS
-mvnw.cmd spring-boot:run    # Windows
-```
-
-### Tests
-
-```bash
+To run the full suite of integration tests and verify endpoints using the project's automated workflow:
 ./mvnw test
-```
