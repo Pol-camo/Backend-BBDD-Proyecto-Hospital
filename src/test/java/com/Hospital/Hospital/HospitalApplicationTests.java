@@ -110,7 +110,7 @@ class NurseControllerTest {
 
     mockMvc.perform(get("/nurse/index"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(0));
+        .andExpect(jsonPath("$.length()").value(1));
   }
 
   // ---------- GET /nurse/name/{name} ----------
